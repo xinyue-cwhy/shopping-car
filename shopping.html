@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车</title>
+    <style>
+        .block{
+            width: 800px;
+            height: auto;
+            min-height: 30px;
+            border: 1px solid silver;
+            margin: auto;
+        }
+        .title{
+            display: flex;/*弹性布局*/
+            flex-direction: row;/*以行的方式修饰*/
+        }
+        .title>div{
+            flex: 1;/*划分区域*/
+            border-bottom: 1px solid silver;
+            border-right: 1px solid silver;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .title>div:nth-child(i) input{
+            position: relative;
+            top: 2px;
+        }
+        .h_list{
+            display: flex;
+            flex-direction: row;
+
+        }
+        .h_list>div{
+            flex: 1;
+            text-align: center;
+            line-height: 80px;
+            border: 1px solid silver;
+        }
+        .leftbtn,.rightbtn,.txt{
+            display: inline-block;
+            width: 30px;
+            text-align: center;
+        }
+        .iscolor{
+            background: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+<div class="block"><!--显示的盒子-->
+    <div class="title"><!--购物车框框-->
+        <div><input type="checkbox" id="allcheck"/>全选/反选</div>
+        <div>名称</div>
+        <div>单价</div>
+        <div>数量</div>
+        <div>小计</div>
+        <div>操作</div>
+    </div>
+</div>
+<div>
+    总计：<label id="label"></label>
+</div>
+<script>
+    var data=[{
+        name:"短袖",
+        price:40,
+        num:1,
+        totle:40
+        },
+        {
+            name:"短袖",
+            price:120,
+            num:1,
+            totle:120
+        },
+        {
+            name:"短袖",
+            price:80,
+            num:1,
+            totle:80
+        },
+        {
+            name:"短袖",
+            price:110,
+            num:1,
+            totle:110
+        }
+        ];
+    var block=document.querySelector(".block");
+    var allcheck=document.getElementById("allcheck");
+    showEle();
+    function showEle(){
+        for (var i = 0; i <data.length ; i++) {
+            //创建行元素
+            var h_list=document.createElement("div");
+            h_list.setAttribute("class","h_list");
+            var div_v_f=document.createElement("div")
+            var check=document.createElement("input");
+            check.type="checkbox";
+            check.index=i;
+            check.addEventListener("click",ckcolor);
+            check.className="all";
+            div_v_f.appendChild(check);
+            h_list.appendChild(div_v_f);
+            for (var k in data[i]) {//里边是集合所以用for in
+                if(k=="num")
+                {
+                    var div_v=document.createElement("div");
+                    var left=document.createElement("button");
+                    left.className="leftbtn";
+                    left.innerHTML="-";
+                    left.index=i;
+                    left.addEventListener("click",leftbtn);
+                    div_v.appendChild(left);
+
+                    var txt=document.createElement("label");
+                    txt.innerHTML=data[i][k];
+                    txt.className="txt";
+                    div_v.appendChild(txt);
+
+                    var right=document.createElement("button");
+                    right.innerHTML="+";
+                    right.className="rightbtn";
+                    right.index=i;
+                    right.addEventListener("click",rightbtn);
+                    div_v.appendChild(right);
+
+                    h_list.appendChild(div_v);
+                }
+                else{
+                    var div_v=document.createElement("div");
+                    div_v.innerHTML=data[i][k];
+                    div_v.className=k;
+                    h_list.appendChild(div_v);
+                }
+            }
+            var div_v_d=document.createElement("div")
+            var btn=document.createElement("button");
+            btn.innerHTML="删除";
+            btn.className="delete";
+            btn.index= i;
+            btn.addEventListener("click",deletebtn);
+            div_v_d.appendChild(btn);
+            h_list.appendChild(div_v_d);
+            block.appendChild(h_list);
+        }
+    }
+    allcheck.onclick=function (){
+        var ckall=document.getElementsByClassName("all");
+        var hlist=document.getElementsByClassName("h_list")
+        for (var i = 0; i <ckall.length ; i++) {
+            ckall[i].checked=!ckall[i].checked;
+            ckallcolor(ckall[i].checked,hlist,i);
+        }
+    }
+    function leftbtn(){
+        var txt=document.getElementsByClassName("txt")
+        var num=txt[this.index].innerHTML;
+        num--;
+        if(num<=1){
+            num=1;
+        }
+        txt[this.index].innerHTML=num;
+        s_totle(this.index,num);
+        showallprice();
+    }
+    function rightbtn(){
+        var txt=document.getElementsByClassName("txt")
+        var num=txt[this.index].innerHTML;
+        num++;
+        txt[this.index].innerHTML=num;
+        s_totle(this.index,num);
+        showallprice();
+    }
+    function s_totle(index,n){
+        var price=document.getElementsByClassName("price");
+        var totle=document.getElementsByClassName("totle");
+        totle[index].innerHTML=price[index].innerHTML*n;
+    }
+    function ckallcolor(isck,obj,index){
+        if(isck){
+            obj[index].className="h_list iscolor";
+        }else {
+            obj[index].className="h_list";
+        }
+        showallprice();
+    }
+    function ckcolor(){
+        var hlist=document.getElementsByClassName("h_list");
+        if(this.checked){
+            hlist[this.index].className="h_list iscolor";
+        }else {
+            hlist[this.index].className="h_list";
+        }
+        showallprice();
+    }
+    function showallprice(){
+        var all=document.getElementsByClassName("all");
+        var totle=document.getElementsByClassName("totle");
+        var allprice=0;
+        for (var i = 0; i <all.length ; i++) {
+            if(all[i].checked){
+                allprice+=parseFloat(totle[i].innerHTML);
+            }
+        }
+        var label=document.getElementById("label");
+        label.innerText=allprice;
+        //console.log(allprice);
+    }
+    function deletebtn(){
+        var hlist=document.getElementsByClassName("h_list");
+        var checkbox=document.getElementsByClassName("all");
+        var leftbtn=document.getElementsByClassName("leftbtn");
+        var deletebtn=document.getElementsByClassName("delete");
+        var rightbtn=document.getElementsByClassName("rightbtn");
+        hlist[this.index].remove();
+        for (var i = 0; i <hlist.length ; i++) {
+            checkbox[i].index=i;
+            leftbtn[i].index=i;
+            rightbtn[i].index=i;
+            deletebtn[i].index=i;
+
+        }
+
+        showallprice();
+    }
+</script>
+</body>
+</html>

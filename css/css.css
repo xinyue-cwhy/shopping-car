@@ -1,0 +1,33 @@
+.block{
+    width: 800px;
+    height: auto;/*高度自适应*/
+    min-height: 30px;/*最小高度指的是没有数据前title那一行的数据*/
+    border: 1px silver solid;
+    margin: auto;/*居中显示*/
+}
+.title{
+    display: flex;/*设置伸缩盒*/
+    flex-direction: row;/*让里面的元素在一行显示*/
+}
+.title>div{
+    flex: 1px;/*分配空间*/
+    height: 30px;/*设置高度是想垂直显示用*/
+    border: 1px solid silver;
+    text-align: center;/*居中显示*/
+    line-height: 30px;/*垂直显示*/
+}
+
+.h_list{
+    display: flex;/*设置伸缩盒*/
+    flex-direction: row;/*让里面的元素在一行显示*/
+}
+.h_list>div{/*分配空间 居中*/
+    flex: 1;
+    text-align: center;
+    line-height: 80px;
+    border: 1px solid silver;
+}
+.txt {/*num里label的宽*/
+    width: 30px;
+    display: inline-block;
+}

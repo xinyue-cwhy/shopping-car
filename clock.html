@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #time{
+            width: 380px;
+            height: 70px;
+            border: 1px solid silver;
+            margin: auto;
+            text-align: center;
+            line-height: 70px;
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+<div id="time"></div>
+<script>
+    var clock=document.getElementById("time");
+    var timego=new Date("2020-12-9 24:0:0");
+   setInterval(function (){
+       var timenow=new Date();
+       var time=timego.getTime()-timenow.getTime();
+       var s=parseInt((time/1000)%60);
+       var m=parseInt((time/1000/60)%60);
+       var h=parseInt((time/1000/60/60)%24);
+       var d=parseInt((time/1000/60/60/24)%30);
+       var hs=time/1000;
+       clock.innerHTML=d+"天"+h+"小时"+m+"分钟"+s+"秒"+hs+"毫秒";
+   },1);
+</script>
+</body>
+</html>
